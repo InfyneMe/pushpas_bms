@@ -11,8 +11,8 @@ class UserController extends Controller
 {
     public function index(){
         try {
-            $users = User::all(); // Fetch all users from the database
-            return view('admin.users', compact('users'));
+            // $users = User::all(); // Fetch all users from the database
+            return view('admin.users');
         } catch (\Exception $e) {
             // Handle the exception, e.g., log it or return an error view
             dd($e->getMessage()); // For debugging purposes, remove in production

@@ -99,7 +99,7 @@
         <x-create-user />
 
         <!-- User List Section -->
-        <x-users-list :users="$users"/>
+        {{-- <x-users-list :users="$users"/> --}}
     </div>
 
     <script>
