@@ -40,7 +40,7 @@ class User extends Authenticatable
     protected static function boot(){
         parent::boot();
         static::creating(function ($user) {
-            $user->uuid = "PSU -" . Str::random(7);
+            $user->uuid = Str::random(7);
         });
     }
 
