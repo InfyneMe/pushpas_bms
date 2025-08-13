@@ -10,8 +10,14 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::all(); // Fetch all users from the database
-        return view('admin.users', compact('users'));
+        try {
+            $users = User::all(); // Fetch all users from the database
+            return view('admin.users', compact('users'));
+        } catch (\Exception $e) {
+            // Handle the exception, e.g., log it or return an error view
+            dd($e->getMessage()); // For debugging purposes, remove in production
+            return back()->withErrors(['error' => 'An error occurred while fetching users.']);
+        }
     }
 
     public function store(Request $request)
