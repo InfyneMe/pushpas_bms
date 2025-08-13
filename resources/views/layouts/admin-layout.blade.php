@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MetronicCloud Dashboard - Bootstrap 5</title>
+    <title>Pushpas BMS - Bootstrap 5</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -44,7 +44,7 @@
             <strong class="flex-grow-1 text-dark">Purchases</strong>
             <i class="bi bi-chevron-down text-dark fs-bold" style="font-size: 10px;"></i>
         </div>
-        <div class="collapse show" id="purchaseDropdown">
+        <div class="collapse" id="purchaseDropdown">
             <div class="dropdown-custom">
                 <div class="dropdown-item-custom text-dark">Purchase List</div>
                 <div class="dropdown-item-custom text-dark">Purchase Add</div>
@@ -142,10 +142,10 @@
             <strong class="flex-grow-1 text-dark">Authentication</strong>
             <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
         </div>
-        <div class="collapse" id="authDropdown">
+        <div class="collapse {{ Request::is('authentication*') ? 'show' : '' }}" id="authDropdown">
             <div class="dropdown-custom">
-                <div class="dropdown-item-custom">User List</div>
-                <div class="dropdown-item-custom">Add Users</div>
+                <a href="{{ route('users.list') }}" class="dropdown-item-custom">Admins</a>
+                <div class="dropdown-item-custom">Employees</div>
                 <div class="dropdown-item-custom">Activity Logs</div>
             </div>
         </div>
@@ -201,20 +201,63 @@
 
     <script>
         // Handle dropdown arrow rotation
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(button => {
-            button.addEventListener('click', function() {
-                const arrow = this.querySelector('.bi-chevron-down');
-                const target = document.querySelector(this.getAttribute('data-bs-target'));
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create mobile menu button if it doesn't exist
+            if (!document.querySelector('.mobile-menu-btn')) {
+                const mobileBtn = document.createElement('button');
+                mobileBtn.className = 'mobile-menu-btn';
+                mobileBtn.innerHTML = '<i class="bi bi-list"></i>';
+                document.body.appendChild(mobileBtn);
+            }
 
-                target.addEventListener('shown.bs.collapse', () => {
-                    arrow.style.transform = 'rotate(180deg)';
-                });
+            // Create sidebar overlay if it doesn't exist
+            if (!document.querySelector('.sidebar-overlay')) {
+                const overlay = document.createElement('div');
+                overlay.className = 'sidebar-overlay';
+                document.body.appendChild(overlay);
+            }
 
-                target.addEventListener('hidden.bs.collapse', () => {
-                    arrow.style.transform = 'rotate(0deg)';
-                });
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+
+            // Toggle sidebar on mobile
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-open');
+                overlay.classList.toggle('show');
+                document.body.style.overflow = sidebar.classList.contains('sidebar-open') ? 'hidden' : '';
+            });
+
+            // Close sidebar when clicking overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 &&
+                    !sidebar.contains(e.target) &&
+                    !mobileMenuBtn.contains(e.target) &&
+                    sidebar.classList.contains('sidebar-open')) {
+                    sidebar.classList.remove('sidebar-open');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('sidebar-open');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
             });
         });
+
     </script>
     @stack('scripts')
 </body>

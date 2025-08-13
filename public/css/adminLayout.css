@@ -1,241 +1,511 @@
+:root {
+    --sidebar-width: 280px;
+    --sidebar-bg: #F8F9FA;
+    --main-bg: #F8F9FA;
+    --content-bg: #ffffff;
+    --text-muted: #7e8299;
+    --text-dark: #181c32;
+    --primary-blue: #3699ff;
+    --border-color: #e5e5e5;
+}
 
-        :root {
-            --sidebar-width: 280px;
-            --sidebar-bg: #F8F9FA;
-            --main-bg: #F8F9FA;
-            --content-bg: #ffffff;
-            --text-muted: #7e8299;
-            --text-dark: #181c32;
-            --primary-blue: #3699ff;
-            --border-color: #e5e5e5;
-        }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--main-bg);
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--main-bg);
-            font-size: 14px;
-        }
-        
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-dark);
+}
 
-        /* Sidebar Styles */
-        .sidebar {
-            width: var(--sidebar-width);
-            min-height: 100vh;
-            background-color: var(--sidebar-bg);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            overflow-y: auto;
-        }
+/* Sidebar Styles */
+.sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background-color: var(--sidebar-bg);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+}
 
-        .logo-section {
-            padding: 1.25rem 1.25rem 1.5rem;
-        }
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
 
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
+.logo-section {
+    padding: 1.25rem 1.25rem 1.5rem;
+}
 
-        .search-container {
-            position: relative;
-        }
+.logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
 
-        .search-input {
-            padding-left: 2.25rem;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237e8299' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: 12px center;
-        }
+.search-container {
+    position: relative;
+}
 
-        .search-shortcut {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 11px;
-            color: var(--text-muted);
-            background: #f1f1f4;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
+.search-input {
+    padding-left: 2.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237e8299' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding-right: 3rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
 
-        .nav-item-custom {
-            padding: 0.5rem 1.25rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            transition: all 0.15s ease;
-            cursor: pointer;
-            margin: 1px 0;
-        }
+.search-shortcut {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: #f1f1f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
 
-        .nav-item-custom:hover {
-            background-color: #e8f4fd;
-            color: var(--primary-blue);
-        }
+.nav-item-custom {
+    padding: 0.5rem 1.25rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    margin: 1px 0;
+    display: flex;
+    align-items: center;
+}
 
-        .nav-item-custom.active {
-            background-color: #e8f4fd;
-            color: var(--primary-blue);
-        }
+.nav-item-custom:hover {
+    background-color: #e8f4fd;
+    color: var(--primary-blue);
+}
 
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-        }
+.nav-item-custom.active {
+    background-color: #e8f4fd;
+    color: var(--primary-blue);
+}
 
-        .dropdown-custom {
-            background-color: #F8F9FA;
-            margin: 4px 0 4px 3.25rem;
-            border-radius: 6px;
-            overflow: hidden;
-        }
+.nav-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 0.75rem;
+}
 
-        .dropdown-item-custom {
-            padding: 0.5rem 1rem;
-            color: var(--text-muted);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
+.dropdown-custom {
+    background-color: #F8F9FA;
+    margin: 4px 0 4px 3.25rem;
+    border-radius: 6px;
+    overflow: hidden;
+}
 
-        .dropdown-item-custom:hover {
-            background-color: #F8F9FA;
-            color: var(--primary-blue);
-        }
+.dropdown-item-custom {
+    padding: 0.5rem 1rem;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
 
-        .dropdown-item-custom.active {
-            background-color: #e8f4fd;
-            color: var(--primary-blue);
-            font-weight: 500;
-        }
+.dropdown-item-custom:hover {
+    background-color: #F8F9FA;
+    color: var(--primary-blue);
+}
 
-        .section-title {
-            font-size: 11px;
-            color: #a1a5b7;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin: 1.5rem 0 0.75rem;
-            padding: 0 1.25rem;
-        }
+.dropdown-item-custom.active {
+    background-color: #e8f4fd;
+    color: var(--primary-blue);
+    font-weight: 500;
+}
 
-        .user-section {
-            margin-top: auto;
-            padding: 1.25rem;
-            border-top: 1px solid var(--border-color);
-        }
+.section-title {
+    font-size: 11px;
+    color: #a1a5b7;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 1.5rem 0 0.75rem;
+    padding: 0 1.25rem;
+}
 
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            background: var(--primary-blue);
-        }
+.user-section {
+    margin-top: auto;
+    padding: 1.25rem;
+    border-top: 1px solid var(--border-color);
+}
 
-        .user-action-btn {
-            width: 24px;
-            height: 24px;
-            background: #f1f1f4;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+}
 
-        /* Main Content */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 1.25rem 1.25rem 1.25rem 0;
-        }
+.user-action-btn {
+    width: 24px;
+    height: 24px;
+    background: #f1f1f4;
+    color: var(--text-muted);
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .content-wrapper {
-            background-color: var(--content-bg);
-            border-radius: 12px;
-            min-height: calc(100vh - 2.5rem);
-            padding: 1.875rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
+/* Main Content */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 1.25rem 1.25rem 1.25rem 0;
+    transition: margin-left 0.3s ease-in-out;
+}
 
-        .setup-card {
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2.5rem;
-            text-align: center;
-        }
+.content-wrapper {
+    background-color: var(--content-bg);
+    border-radius: 12px;
+    min-height: calc(100vh - 2.5rem);
+    padding: 1.875rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
+}
 
-        .setup-illustration {
-            font-size: 60px;
-            margin-bottom: 1.25rem;
-        }
+.setup-card {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+}
 
-        .teams-section {
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
+.setup-illustration {
+    font-size: 60px;
+    margin-bottom: 1.25rem;
+}
 
-        .teams-table {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+.teams-section {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    overflow-x: auto;
+}
 
-        .teams-table th {
-            background-color: #fafafa;
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 12px;
-        }
+.teams-table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 100%;
+    width: 100%;
+}
 
-        .team-description {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+.teams-table th {
+    background-color: #fafafa;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    padding: 0.75rem;
+    white-space: nowrap;
+}
 
-        .rating {
-            color: #ffc700;
-        }
+.teams-table td {
+    padding: 0.75rem;
+    white-space: nowrap;
+}
 
-        .member-avatar {
-            width: 28px;
-            height: 28px;
-            border: 2px solid white;
-            margin-left: -5px;
-        }
+.team-description {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
 
-        .member-avatar:first-child {
-            margin-left: 0;
-        }
+.rating {
+    color: #ffc700;
+}
 
-        .block-list-card {
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
+.member-avatar {
+    width: 28px;
+    height: 28px;
+    border: 2px solid white;
+    margin-left: -5px;
+    border-radius: 50%;
+}
 
-        .blocked-user-avatar {
-            width: 32px;
-            height: 32px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-        }
+.member-avatar:first-child {
+    margin-left: 0;
+}
 
-        .user-commits {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+.block-list-card {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
 
-        .delete-btn {
-            color: #f1416c;
-            background: none;
-            border: none;
-            font-size: 16px;
-        }
+.blocked-user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-commits {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.delete-btn {
+    color: #f1416c;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .content-wrapper {
+        padding: 2.5rem;
+    }
+    
+    .setup-card {
+        padding: 3rem;
+    }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+    .content-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .teams-section {
+        padding: 1rem;
+    }
+    
+    .setup-card {
+        padding: 2rem;
+    }
+    
+    .setup-illustration {
+        font-size: 50px;
+    }
+}
+
+/* Tablet and small desktop (992px and down) */
+@media (max-width: 992px) {
+    :root {
+        --sidebar-width: 260px;
+    }
+    
+    .sidebar {
+        width: var(--sidebar-width);
+    }
+    
+    .logo-section {
+        padding: 1rem;
+    }
+    
+    .nav-item-custom {
+        padding: 0.4rem 1rem;
+    }
+    
+    .section-title {
+        padding: 0 1rem;
+    }
+    
+    .user-section {
+        padding: 1rem;
+    }
+}
+
+/* Mobile landscape and small tablets (768px and down) */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+    
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .content-wrapper {
+        padding: 1rem;
+        margin-top: 3rem;
+        border-radius: 8px;
+    }
+    
+    .teams-section {
+        padding: 0.75rem;
+        overflow-x: auto;
+    }
+    
+    .teams-table {
+        min-width: 600px;
+    }
+    
+    .setup-card {
+        padding: 1.5rem;
+    }
+    
+    .setup-illustration {
+        font-size: 40px;
+    }
+    
+    .block-list-card {
+        padding: 1rem;
+    }
+    
+    /* Stack user section items on mobile */
+    .user-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .user-section .d-flex {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Mobile portrait (480px and down) */
+@media (max-width: 480px) {
+    .content-wrapper {
+        padding: 0.75rem;
+        margin-top: 3.5rem;
+    }
+    
+    .setup-card {
+        padding: 1rem;
+    }
+    
+    .setup-illustration {
+        font-size: 32px;
+    }
+    
+    .teams-section {
+        padding: 0.5rem;
+    }
+    
+    .block-list-card {
+        padding: 0.75rem;
+    }
+    
+    .logo-section {
+        padding: 0.75rem;
+    }
+    
+    .nav-item-custom {
+        padding: 0.4rem 0.75rem;
+    }
+    
+    .dropdown-custom {
+        margin-left: 2.5rem;
+    }
+    
+    .search-container {
+        padding: 0 0.75rem;
+    }
+    
+    .section-title {
+        padding: 0 0.75rem;
+    }
+    
+    .user-section {
+        padding: 0.75rem;
+    }
+}
+
+/* Utility classes for responsive behavior */
+.d-none-mobile {
+    display: block;
+}
+
+.d-block-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .d-none-mobile {
+        display: none;
+    }
+    
+    .d-block-mobile {
+        display: block;
+    }
+}
+
+/* Responsive text utilities */
+@media (max-width: 576px) {
+    .responsive-text {
+        font-size: 12px;
+    }
+    
+    .responsive-title {
+        font-size: 1.25rem;
+    }
+    
+    .responsive-subtitle {
+        font-size: 0.9rem;
+    }
+}
