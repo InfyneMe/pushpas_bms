@@ -68,7 +68,12 @@
                                             <li><a class="dropdown-item small" href="#"><i class="bi bi-pencil me-2"></i>Edit User</a></li>
                                             <li><a class="dropdown-item small" href="#"><i class="bi bi-key me-2"></i>Reset Password</a></li>
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item small text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete User</a></li>
+                                            <li>
+                                                <button class="dropdown-item small text-danger border-0 bg-transparent w-100 text-start" 
+                                                        onclick="showDeleteModal('{{ $user->uuid }}', '{{ addslashes($user->name) }}', '{{ $user->email }}', '{{ $user->role ?? 'Standard' }}')">
+                                                    <i class="bi bi-trash me-2"></i>Delete User
+                                                </button>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -128,16 +133,15 @@
                                     @endif
                                 </div>
 
-
                                 <!-- Status and Joined Date -->
                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                  <span class="badge rounded-pill px-3 py-2" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">
-                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                                <polyline points="22,4 12,14.01 9,11.01"/>
-                                            </svg>
-                                            Active
-                                        </span>
+                                    <span class="badge rounded-pill px-3 py-2" style="background-color: #dcfce7; color: #16a34a; font-size: 0.75rem;">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                            <polyline points="22,4 12,14.01 9,11.01"/>
+                                        </svg>
+                                        Active
+                                    </span>
                                     <small class="text-muted">
                                         Joined {{ $user->created_at ? $user->created_at->format('M d, Y') : 'Unknown' }}
                                     </small>
@@ -169,7 +173,7 @@
                 </div>
                 <h5 class="text-muted mb-2">No Users Found</h5>
                 <p class="text-muted mb-4">There are no users in the system yet.</p>
-                <a href="{{ route('users.create') ?? '#' }}" class="btn btn-primary">
+                <a href="javascript:window.location.reload();" class="btn btn-primary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="12" y1="8" x2="12" y2="16"/>
@@ -181,6 +185,125 @@
         @endif
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 p-2 rounded-circle" style="background: rgba(239, 68, 68, 0.1);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                            <path d="M3 6h18"/>
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-semibold text-dark mb-1" id="deleteUserModalLabel">Delete User Account</h5>
+                        <p class="text-muted small mb-0">This action cannot be undone</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <!-- User Info Card -->
+                <div class="p-3 mb-4 rounded-3" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+                    <div class="d-flex align-items-center">
+                        <img id="deleteUserAvatar" src="" class="rounded-circle me-3" width="48" height="48" alt="">
+                        <div class="flex-grow-1">
+                            <h6 class="fw-semibold text-dark mb-1" id="deleteUserName"></h6>
+                            <div class="small text-muted" id="deleteUserEmail"></div>
+                            <div class="small text-muted" id="deleteUserRole"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Message -->
+                <div class="alert alert-danger border-0" style="background: rgba(239, 68, 68, 0.05); border-radius: 12px;">
+                    <div class="d-flex align-items-start">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" class="me-3 mt-1 flex-shrink-0">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <div>
+                            <h6 class="fw-semibold text-danger mb-1">Warning: Permanent Deletion</h6>
+                            <p class="text-danger small mb-2">
+                                Deleting this user will permanently remove:
+                            </p>
+                            <ul class="text-danger small mb-0 ps-3">
+                                <li>User profile and account information</li>
+                                <li>All associated data and permissions</li>
+                                <li>Login access and authentication</li>
+                                <li>Any linked records or activities</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmation Input -->
+                <div class="mb-3">
+                    <label for="confirmDeleteInput" class="form-label small fw-semibold text-dark">
+                        Type "DELETE" to confirm:
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="confirmDeleteInput" 
+                           placeholder="Type DELETE here"
+                           style="border-radius: 8px; border: 2px solid #e5e7eb;">
+                </div>
+
+                <!-- Optional: Reason for deletion -->
+                <div class="mb-3">
+                    <label for="deleteReason" class="form-label small fw-semibold text-dark">
+                        Reason for deletion (optional):
+                    </label>
+                    <select class="form-select" id="deleteReason" style="border-radius: 8px; border: 2px solid #e5e7eb;">
+                        <option value="">Select a reason</option>
+                        <option value="inactive">User inactive/no longer needed</option>
+                        <option value="duplicate">Duplicate account</option>
+                        <option value="security">Security concerns</option>
+                        <option value="request">User requested deletion</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal" style="border-radius: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    Cancel
+                </button>
+                <button type="button" 
+                        class="btn btn-danger" 
+                        id="confirmDeleteBtn" 
+                        disabled
+                        style="border-radius: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-2">
+                        <path d="M3 6h18"/>
+                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Delete User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Form (Hidden) -->
+<form id="deleteUserForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="reason" id="deleteReasonInput">
+</form>
 
 <style>
     /* Enhanced Card Hover Effects */
@@ -218,38 +341,105 @@
     .text-center svg {
         opacity: 0.5;
     }
+
     .uuid-container:hover {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
-    transform: scale(1.02);
-}
+        background: #f1f5f9 !important;
+        border-color: #cbd5e1 !important;
+        transform: scale(1.02);
+    }
 
-.uuid-container.copied {
-    background: #f0fdf4 !important;
-    border-color: #10b981 !important;
-}
+    .uuid-container.copied {
+        background: #f0fdf4 !important;
+        border-color: #10b981 !important;
+    }
 
-.uuid-text {
-    user-select: none;
-    letter-spacing: 0.5px;
-}
+    .uuid-text {
+        user-select: none;
+        letter-spacing: 0.5px;
+    }
 
-/* Icon transitions */
-.copy-icon, .check-icon {
-    transition: all 0.2s ease;
-}
+    /* Icon transitions */
+    .copy-icon, .check-icon {
+        transition: all 0.2s ease;
+    }
 
-.uuid-container:hover .copy-icon {
-    stroke: #3b82f6;
-}
+    .uuid-container:hover .copy-icon {
+        stroke: #3b82f6;
+    }
 
-/* Tooltip styling */
-.uuid-container[title] {
-    position: relative;
-}
+    /* Tooltip styling */
+    .uuid-container[title] {
+        position: relative;
+    }
+
+    /* Modal Enhancements */
+    .modal-content {
+        backdrop-filter: blur(10px);
+    }
+
+    /* Confirmation Input Styling */
+    #confirmDeleteInput:focus {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 0.25rem rgba(239, 68, 68, 0.1);
+    }
+
+    #confirmDeleteInput.valid {
+        border-color: #10b981;
+        background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    /* Delete Button States */
+    #confirmDeleteBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    #confirmDeleteBtn:not(:disabled) {
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+        }
+    }
+
+    /* Loading state for delete button */
+    .btn-loading {
+        position: relative;
+        color: transparent !important;
+    }
+
+    .btn-loading::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 50%;
+        left: 50%;
+        margin-left: -8px;
+        margin-top: -8px;
+        border: 2px solid transparent;
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
 </style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    let currentUserUuid = null;
+
     // Handle UUID copy functionality
     document.querySelectorAll('.uuid-container').forEach(container => {
         container.addEventListener('click', async function() {
@@ -299,6 +489,92 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Delete User Modal Functionality
+    window.showDeleteModal = function(uuid, name, email, role) {
+        currentUserUuid = uuid;
+        
+        // Populate modal with user data
+        document.getElementById('deleteUserName').textContent = name;
+        document.getElementById('deleteUserEmail').textContent = email;
+        document.getElementById('deleteUserRole').textContent = role + ' Access';
+        
+        // Set avatar
+        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ef4444&color=fff&size=48`;
+        document.getElementById('deleteUserAvatar').src = avatarUrl;
+        
+        // Reset form
+        document.getElementById('confirmDeleteInput').value = '';
+        document.getElementById('deleteReason').value = '';
+        document.getElementById('confirmDeleteBtn').disabled = true;
+        document.getElementById('confirmDeleteInput').classList.remove('valid');
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+        modal.show();
+    };
+
+    // Confirmation input validation
+    const confirmInput = document.getElementById('confirmDeleteInput');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+    confirmInput.addEventListener('input', function() {
+        const isValid = this.value.trim().toUpperCase() === 'DELETE';
+        confirmBtn.disabled = !isValid;
+        
+        if (isValid) {
+            this.classList.add('valid');
+        } else {
+            this.classList.remove('valid');
+        }
+    });
+
+    // Handle delete confirmation
+    confirmBtn.addEventListener('click', function() {
+        if (!currentUserUuid) return;
+
+        // Show loading state
+        this.classList.add('btn-loading');
+        this.disabled = true;
+
+        // Get reason
+        const reason = document.getElementById('deleteReason').value;
+        document.getElementById('deleteReasonInput').value = reason;
+
+        // Set form action and submit with correct path
+        const form = document.getElementById('deleteUserForm');
+        form.action = `/authentication/users/${currentUserUuid}`;
+        form.submit();
+    });
+
+    // Reset modal when closed
+    document.getElementById('deleteUserModal').addEventListener('hidden.bs.modal', function() {
+        currentUserUuid = null;
+        document.getElementById('confirmDeleteInput').value = '';
+        document.getElementById('deleteReason').value = '';
+        document.getElementById('confirmDeleteBtn').disabled = true;
+        document.getElementById('confirmDeleteBtn').classList.remove('btn-loading');
+        document.getElementById('confirmDeleteInput').classList.remove('valid');
+    });
+
+    // Keyboard shortcuts for modal
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('deleteUserModal');
+        if (modal.classList.contains('show')) {
+            // Escape to close
+            if (e.key === 'Escape') {
+                bootstrap.Modal.getInstance(modal).hide();
+            }
+            // Enter to confirm (if input is valid)
+            else if (e.key === 'Enter' && !confirmBtn.disabled) {
+                confirmBtn.click();
+            }
+        }
+    });
+
+    // Auto-focus confirmation input when modal opens
+    document.getElementById('deleteUserModal').addEventListener('shown.bs.modal', function() {
+        document.getElementById('confirmDeleteInput').focus();
+    });
 });
 </script>
-

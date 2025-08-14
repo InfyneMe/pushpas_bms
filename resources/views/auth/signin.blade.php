@@ -38,27 +38,23 @@
                 <div class="text-sm text-gray-500 font-light">Need help?</div>
             </div>
             <p class="text-gray-500 text-sm font-light mb-6">Access your BMS dashboard with enhanced security protocols.</p>
-            <form class="space-y-5">
+            <form action="{{ route('signin') }}" method="POST" class="space-y-5">
+                @csrf
                 <div class="space-y-2">
                     <label for="email" class="block text-sm font-light text-gray-700">Employee ID</label>
                     <div class="relative">
                         <div class="absolute left-3 input-icon text-gray-400">
-                            <!-- <svg id="email-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                            </svg> -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <input type="text" id="email" name="email" placeholder="Employee ID" class="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="userId" name="userId" placeholder="Employee ID" class="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <div class="flex justify-between">
                         <label for="password" class="block text-sm font-light text-gray-700">Password</label>
-                        <!-- <a href="#" class="text-xs text-blue-600 hover:text-blue-800">Forgot password?</a> -->
                     </div>
                     <div class="relative">
                         <div class="absolute left-3 input-icon text-gray-400">
@@ -69,14 +65,6 @@
                         <input type="password" id="password" name="password" placeholder="••••••••" class="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
-
-                <!-- <div class="flex items-center">
-                    <input id="remember" name="remember" type="checkbox" class="h-4 w-4 bg-gray-50 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
-                    <label for="remember" class="ml-2 block text-sm text-gray-600 font-light">
-                        Remember this device
-                    </label>
-                </div> -->
-
                 <div class="pt-2">
                     <button type="submit" class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center justify-center font-light">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">

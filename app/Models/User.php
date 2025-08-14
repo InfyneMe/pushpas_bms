@@ -37,12 +37,29 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected static function boot(){
+    protected static function boot()
+    {
         parent::boot();
+
         static::creating(function ($user) {
-            $user->uuid = Str::random(7);
+            // Get the last user with a UUID that matches your pattern
+            $lastUser = User::where('uuid', 'LIKE', 'PB-SU-%')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if ($lastUser) {
+                // Extract the number part from the UUID (last 4 digits)
+                $lastNumber = (int) substr($lastUser->uuid, -4);
+                $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                // If no previous user, start from 0001
+                $newNumber = '0001';
+            }
+
+            $user->uuid = 'PB-SU-' . $newNumber;
         });
     }
+
 
     /**
      * Get the attributes that should be cast.

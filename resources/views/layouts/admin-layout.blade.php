@@ -24,14 +24,6 @@
             </div>
         </div>
 
-        <!-- Search Box -->
-        <div class="px-3 mb-3">
-            <div class="search-container">
-                <input type="text" class="form-control search-input border-1" placeholder="Search">
-                <span class="search-shortcut">cmd /</span>
-            </div>
-        </div>
-
         <!-- Navigation Items -->
         <div class="nav-item-custom active d-flex align-items-center">
             <i class="bi bi-house nav-icon me-3 text-dark"></i>
@@ -116,10 +108,18 @@
             <strong class="flex-grow-1 text-dark">Crushers</strong>
             <i class="bi bi-chevron-down text-dark" style="font-size: 10px;"></i>
         </div>
-        <div class="collapse" id="crusherDropdown">
+        <div class="collapse {{ Request::is('crusher*') ? 'show' : '' }}" id="crusherDropdown">
             <div class="dropdown-custom">
-                <div class="dropdown-item-custom text-dark">Crushers List</div>
-                <div class="dropdown-item-custom text-dark">Add Crushers</div>
+                <div class="my-2">
+                    <a href="{{ route('crusher.list') }}" class="dropdown-item-custom text-decoration-none text-dark">
+                        Crushers
+                    </a>
+                </div>
+                <div class="my-2">
+                    <a href="{{ route('crusher.create') }}" class="dropdown-item-custom text-decoration-none text-dark">
+                        Add Crushers
+                    </a>
+                </div>
                 <div class="dropdown-item-custom text-dark">Manage Crushers</div>
             </div>
         </div>
@@ -144,9 +144,15 @@
         </div>
         <div class="collapse {{ Request::is('authentication*') ? 'show' : '' }}" id="authDropdown">
             <div class="dropdown-custom">
-                <a href="{{ route('users.list') }}" class="dropdown-item-custom">Admins</a>
-                <div class="dropdown-item-custom">Employees</div>
-                <div class="dropdown-item-custom">Activity Logs</div>
+                <div class="my-2">
+                    <a href="{{ route('users.list') }}" class="dropdown-item-custom text-decoration-none text-dark">Admins</a>
+                </div>
+                <div class="my-2">
+                    <a href="{{ route('employees.index') }}" class="dropdown-item-custom text-decoration-none text-dark">Employees</a>
+                </div>
+                <div class="my-1">
+                    <a class="dropdown-item-custom text-decoration-none text-dark">Activity Logs</a>
+                </div>
             </div>
         </div>
 
@@ -257,6 +263,9 @@
                 }
             });
         });
+
+        
+
 
     </script>
     @stack('scripts')

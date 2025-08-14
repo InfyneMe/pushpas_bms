@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -51,10 +52,32 @@ class UserController extends Controller
 
             return redirect()->route('users.list')->with('success', 'User created successfully.');
         } catch (ValidationException $e) {
+            dd($e->getMessage());
             return back()->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
+            dd($e->getMessage());
             // Log::error('User creation error: ' . $e->getMessage());
             return back()->withErrors(['error' => 'An unexpected error occurred. Please try again.'])->withInput();
         }
     }
+    public function destroy($uuid)
+    {
+        try {
+            $user = User::where('uuid', $uuid)->firstOrFail();
+            $userName = $user->name;
+            // Delete the user
+            $user->delete();
+            
+            return redirect()
+                ->back()
+                ->with('success', "User '{$userName}' has been deleted successfully.");
+                
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'Failed to delete user. Please try again.']);
+        }
+    }
+
 }
